@@ -9,6 +9,7 @@ import csv
 import io
 import json
 import time
+import os
 from contextlib import redirect_stdout
 from pathlib import Path
 
@@ -39,8 +40,12 @@ def rows_to_dict(rows, keys, metrics):
 
 def pause(enabled, message):
     if enabled:
-        input(f"\n[PAUSE] {message}\nBuka http://localhost:4040, lalu tekan Enter ... ")
-
+        secs = os.environ.get("PAUSE_SECONDS")
+        if secs:
+            print(f"\n[PAUSE] {message}\nBuka http://localhost:4040 sekarang, lanjut otomatis dalam {secs} detik ...", flush=True)
+            time.sleep(int(secs))
+        else:
+            input(f"\n[PAUSE] {message}\nBuka http://localhost:4040, lalu tekan Enter ... ")
 
 def main():
     p = argparse.ArgumentParser()
